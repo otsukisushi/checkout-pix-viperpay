@@ -15,8 +15,8 @@ app.post('/gerar-pagamento', async (req, res) => {
       external_id: externalId,
       total_amount: totalAmount,
       payment_method: 'PIX',
-      webhook_url: 'https://webhook.site/teste',
-      ip: '127.0.0.1',
+      webhook_url: 'https://webhook.site/teste', // obrigatório
+      ip: '127.0.0.1', // necessário
       customer: {
         name: 'Anonimo',
         email: 'anonimo@anonimo.com',
@@ -43,8 +43,9 @@ app.post('/gerar-pagamento', async (req, res) => {
     const pix = response.data?.pix;
 
     if (!pix || !pix.payload) {
+      console.error('Resposta inesperada da ViperPay:', response.data);
       return res.status(400).json({
-        error: 'Falha ao gerar payload do Pix',
+        error: 'Pix não gerado. Verifique os dados da conta e integração.',
         detalhes: response.data
       });
     }

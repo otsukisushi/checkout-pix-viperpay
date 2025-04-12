@@ -40,15 +40,14 @@ app.post('/gerar-pagamento', async (req, res) => {
       }
     });
 
-    const pix = response.data?.pix;
+    if (!response.data?.pix) {
+  console.error('🧨 ViperPay respondeu com erro:', response.data);
+  return res.status(400).json({
+    error: 'Pix não gerado pela ViperPay',
+    detalhes: response.data
+  });
+}
 
-    if (!pix || !pix.payload) {
-      console.error('⚠️ Resposta sem payload:', response.data);
-      return res.status(400).json({
-        error: 'Pix não gerado.',
-        detalhes: response.data
-      });
-    }
 
     res.json({
       qr_code: pix.payload,

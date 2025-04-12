@@ -15,7 +15,6 @@ app.post('/gerar-pagamento', async (req, res) => {
       external_id: externalId,
       total_amount: totalAmount,
       payment_method: 'PIX',
-      pix_key: 'jheancruzeiro@hotmail.com', // agora sim!
       webhook_url: 'https://webhook.site/teste',
       ip: '127.0.0.1',
       customer: {

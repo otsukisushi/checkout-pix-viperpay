@@ -22,21 +22,12 @@ app.post('/gerar-pagamento', async (req, res) => {
         email: 'joao.teste@gmail.com',
         phone: '11987654321',
         document_type: 'CPF',
-        document: '11268033677'
-      },
-      items: [
-        {
-          id: 'ade78fb1-815f-476a-a520-24f7c9ae2f42', // ID real do produto
-          title: 'Pix de R$100',
-          description: 'Pagamento rápido via Pix',
-          price: totalAmount,
-          quantity: 1,
-          is_physical: false
-        }
-      ]
+        document: '12345678909'
+      }
+      // ❌ items removido
     }, {
       headers: {
-        'api-secret': process.env.api_secret
+        'api-secret': process.env.API_SECRET
       }
     });
 

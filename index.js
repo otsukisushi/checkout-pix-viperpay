@@ -8,13 +8,22 @@ app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 10000; // R$100,00 em centavos
+  const totalAmount = 10000; // R$100,00
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {
       external_id: externalId,
       total_amount: totalAmount,
       payment_method: 'PIX',
+      webhook_url: 'https://webhook.site/teste', // precisa ser URL válida
+      ip: '127.0.0.1', // precisa ser um IP real ou válido
+      customer: {
+        name: 'Cliente Teste',
+        email: 'cliente@email.com',
+        phone: '11999999999',
+        document_type: 'CPF',
+        document: '12345678909'
+      },
       items: [
         {
           id: 'curso_xyz',

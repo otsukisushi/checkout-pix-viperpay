@@ -1,3 +1,10 @@
+# Gerando o arquivo index.js ajustado com:
+# - Valor correto (10000 centavos = R$100)
+# - Remoção da chave Pix explícita
+# - Estrutura de item bem formatada
+# - Tratamento de erro detalhado
+
+index_code_final = """
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -8,7 +15,7 @@ app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 10000;
+  const totalAmount = 10000; // R$100,00
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {
@@ -26,9 +33,9 @@ app.post('/gerar-pagamento', async (req, res) => {
       },
       items: [
         {
-          id: 'ade78fb1-815f-476a-a520-24f7c9ae2f42', // ID do produto real
-          title: 'Pagamento via Pix',
-          description: 'Checkout automático de R$100',
+          id: 'pix100',
+          title: 'Pix de R$100',
+          description: 'Pagamento rápido via Pix',
           price: totalAmount,
           quantity: 1,
           is_physical: false
@@ -64,7 +71,8 @@ app.post('/gerar-pagamento', async (req, res) => {
 
     res.status(500).json({
       error: 'Erro ao gerar pagamento',
-      detalhes: error.response?.data
+      detalhes: error.response?.data || error.message,
+      raw: JSON.stringify(error, Object.getOwnPropertyNames(error))
     });
   }
 });
@@ -72,3 +80,10 @@ app.post('/gerar-pagamento', async (req, res) => {
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
 });
+"""
+
+index_path = "/mnt/data/index.js"
+with open(index_path, "w") as f:
+    f.write(index_code_final.strip())
+
+index_path

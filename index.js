@@ -3,19 +3,18 @@ const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-app.use(cors()); // <- Libera acesso CORS
+app.use(cors());
 app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 4970; // R$49,70 em centavos
+  const totalAmount = 10000; // R$100,00 em centavos
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {
       external_id: externalId,
       total_amount: totalAmount,
       payment_method: 'PIX',
-      webhook_url: 'https://seusite.com/webhook',
       items: [
         {
           id: 'curso_xyz',
@@ -25,15 +24,7 @@ app.post('/gerar-pagamento', async (req, res) => {
           quantity: 1,
           is_physical: false
         }
-      ],
-      ip: req.ip,
-      customer: {
-        name: 'Cliente',
-        email: 'cliente@example.com',
-        phone: '31999999999',
-        document_type: 'CPF',
-        document: '12345678900'
-      }
+      ]
     }, {
       headers: {
         'api-secret': process.env.API_SECRET

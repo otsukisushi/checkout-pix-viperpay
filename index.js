@@ -36,7 +36,7 @@ app.post('/gerar-pagamento', async (req, res) => {
       ]
     }, {
       headers: {
-        'api-secret': process.env.API_SECRET
+        'api-secret': process.env.api_secret
       }
     });
 

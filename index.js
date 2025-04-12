@@ -22,7 +22,7 @@ app.post('/gerar-pagamento', async (req, res) => {
         email: 'joao.teste@gmail.com',
         phone: '11987654321',
         document_type: 'CPF',
-        document: '12345678909'
+        document: '11268033677'
       },
       items: [
         {

@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 10000; // R$100,00
+  const totalAmount = Number(10000); // R$100,00 em centavos
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {
@@ -18,15 +18,15 @@ app.post('/gerar-pagamento', async (req, res) => {
       webhook_url: 'https://webhook.site/teste',
       ip: '127.0.0.1',
       customer: {
-        name: 'Anonimo',
-        email: 'anonimo@anonimo.com',
-        phone: '11999999999',
+        name: 'João da Silva',
+        email: 'joao.teste@gmail.com',
+        phone: '11987654321',
         document_type: 'CPF',
         document: '12345678909'
       },
       items: [
         {
-          id: 'pix100',
+          id: 'ade78fb1-815f-476a-a520-24f7c9ae2f42', // ID real do produto
           title: 'Pix de R$100',
           description: 'Pagamento rápido via Pix',
           price: totalAmount,
@@ -36,7 +36,7 @@ app.post('/gerar-pagamento', async (req, res) => {
       ]
     }, {
       headers: {
-        'api-secret': process.env.api_secret
+        'api-secret': process.env.API_SECRET
       }
     });
 

@@ -8,15 +8,15 @@ app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 10000; // R$100,00
+  const totalAmount = 10000;
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {
       external_id: externalId,
       total_amount: totalAmount,
       payment_method: 'PIX',
-      webhook_url: 'https://webhook.site/teste', // obrigatório
-      ip: '127.0.0.1', // necessário
+      webhook_url: 'https://webhook.site/teste',
+      ip: '127.0.0.1',
       customer: {
         name: 'Anonimo',
         email: 'anonimo@anonimo.com',
@@ -43,9 +43,9 @@ app.post('/gerar-pagamento', async (req, res) => {
     const pix = response.data?.pix;
 
     if (!pix || !pix.payload) {
-      console.error('Resposta inesperada da ViperPay:', response.data);
+      console.error('⚠️ Resposta sem payload:', response.data);
       return res.status(400).json({
-        error: 'Pix não gerado. Verifique os dados da conta e integração.',
+        error: 'Pix não gerado.',
         detalhes: response.data
       });
     }
@@ -56,7 +56,7 @@ app.post('/gerar-pagamento', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Erro ao gerar pagamento:', {
+    console.error('❌ Erro ao gerar pagamento:', {
       message: error.message,
       data: error.response?.data,
       status: error.response?.status

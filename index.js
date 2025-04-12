@@ -1,4 +1,3 @@
-"""
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -57,16 +56,12 @@ app.post('/gerar-pagamento', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Erro ao gerar pagamento:', {
-      message: error.message,
-      data: error.response?.data,
-      status: error.response?.status
-    });
+    const rawError = error?.response?.data || error.message || 'Erro desconhecido';
+    console.error('❌ Erro ao gerar pagamento:', rawError);
 
     res.status(500).json({
       error: 'Erro ao gerar pagamento',
-      detalhes: error.response?.data || error.message,
-      raw: JSON.stringify(error, Object.getOwnPropertyNames(error))
+      detalhes: rawError
     });
   }
 });
@@ -74,4 +69,3 @@ app.post('/gerar-pagamento', async (req, res) => {
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
 });
-"""

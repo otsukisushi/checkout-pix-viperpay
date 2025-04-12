@@ -24,16 +24,16 @@ app.post('/gerar-pagamento', async (req, res) => {
         document_type: 'CPF',
         document: '12345678909'
       },
-      items: [
-        {
-          id: 'pix100',
-          title: 'Pagamento via Pix',
-          description: 'Checkout rápido de R$100',
-          price: totalAmount,
-          quantity: 1,
-          is_physical: false
-        }
-      ]
+     items: [
+  {
+    id: 'ade78fb1-815f-476a-a520-24f7c9ae2f42',
+    title: 'Pagamento via Pix',
+    description: 'Checkout automático de R$100',
+    price: 10000,
+    quantity: 1,
+    is_physical: false
+  }
+]
     }, {
       headers: {
         'api-secret': process.env.API_SECRET

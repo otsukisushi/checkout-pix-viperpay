@@ -8,27 +8,27 @@ app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 10000; // R$100,00
+  const totalAmount = 10000; // R$100,00 em centavos
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {
       external_id: externalId,
       total_amount: totalAmount,
       payment_method: 'PIX',
-      webhook_url: 'https://webhook.site/teste', // precisa ser URL válida
-      ip: '127.0.0.1', // precisa ser um IP real ou válido
+      webhook_url: 'https://webhook.site/teste', // só pra API aceitar
+      ip: '127.0.0.1', // fake válido
       customer: {
-        name: 'Cliente Teste',
-        email: 'cliente@email.com',
+        name: 'Anonimo',
+        email: 'anonimo@anonimo.com',
         phone: '11999999999',
         document_type: 'CPF',
         document: '12345678909'
       },
       items: [
         {
-          id: 'curso_xyz',
-          title: 'Curso XYZ',
-          description: 'Acesso completo ao Curso XYZ',
+          id: 'pix100',
+          title: 'Pagamento via Pix',
+          description: 'Checkout rápido de R$100',
           price: totalAmount,
           quantity: 1,
           is_physical: false
@@ -40,12 +40,31 @@ app.post('/gerar-pagamento', async (req, res) => {
       }
     });
 
-    const { pix } = response.data;
-    res.json({ qr_code: pix.payload, copia_cola: pix.payload });
+    const pix = response.data?.pix;
+
+    if (!pix || !pix.payload) {
+      return res.status(400).json({
+        error: 'Falha ao gerar payload do Pix',
+        detalhes: response.data
+      });
+    }
+
+    res.json({
+      qr_code: pix.payload,
+      copia_cola: pix.payload
+    });
 
   } catch (error) {
-    console.error('Erro ao gerar pagamento:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Erro ao gerar pagamento' });
+    console.error('Erro ao gerar pagamento:', {
+      message: error.message,
+      data: error.response?.data,
+      status: error.response?.status
+    });
+
+    res.status(500).json({
+      error: 'Erro ao gerar pagamento',
+      detalhes: error.response?.data
+    });
   }
 });
 

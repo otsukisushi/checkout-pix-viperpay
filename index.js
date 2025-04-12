@@ -1,10 +1,4 @@
-# Gerando o arquivo index.js ajustado com:
-# - Valor correto (10000 centavos = R$100)
-# - Remoção da chave Pix explícita
-# - Estrutura de item bem formatada
-# - Tratamento de erro detalhado
-
-index_code_final = """
+"""
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -81,9 +75,3 @@ app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
 });
 """
-
-index_path = "/mnt/data/index.js"
-with open(index_path, "w") as f:
-    f.write(index_code_final.strip())
-
-index_path

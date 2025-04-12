@@ -1,11 +1,14 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
+
 const app = express();
+app.use(cors()); // <- Libera acesso CORS
 app.use(express.json());
 
 app.post('/gerar-pagamento', async (req, res) => {
   const externalId = 'pedido_' + Date.now();
-  const totalAmount = 4970; // R$49,70
+  const totalAmount = 4970; // R$49,70 em centavos
 
   try {
     const response = await axios.post('https://api.viperpay.tech/v1/transactions', {

@@ -24,30 +24,31 @@ app.post('/gerar-pagamento', async (req, res) => {
         document_type: 'CPF',
         document: '12345678909'
       },
-     items: [
-  {
-    id: 'ade78fb1-815f-476a-a520-24f7c9ae2f42',
-    title: 'Pagamento via Pix',
-    description: 'Checkout automático de R$100',
-    price: 10000,
-    quantity: 1,
-    is_physical: false
-  }
-]
+      items: [
+        {
+          id: 'ade78fb1-815f-476a-a520-24f7c9ae2f42', // ID do produto real
+          title: 'Pagamento via Pix',
+          description: 'Checkout automático de R$100',
+          price: totalAmount,
+          quantity: 1,
+          is_physical: false
+        }
+      ]
     }, {
       headers: {
         'api-secret': process.env.API_SECRET
       }
     });
 
-    if (!response.data?.pix) {
-  console.error('🧨 ViperPay respondeu com erro:', response.data);
-  return res.status(400).json({
-    error: 'Pix não gerado pela ViperPay',
-    detalhes: response.data
-  });
-}
+    const pix = response.data?.pix;
 
+    if (!pix || typeof pix.payload !== 'string') {
+      console.error('❌ ViperPay respondeu com erro:', JSON.stringify(response.data, null, 2));
+      return res.status(400).json({
+        error: 'Pix não gerado pela ViperPay.',
+        detalhes: response.data
+      });
+    }
 
     res.json({
       qr_code: pix.payload,
